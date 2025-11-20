@@ -250,6 +250,16 @@ If you use this library in academic work, please cite:
   year={2025},
   url={https://github.com/ivrit/hebrew-gdex-extractor}
 }
+
+@inproceedings{kilgarriff2008gdex,
+  title={GDEX: Automatically finding good dictionary examples in a corpus},
+  author={Kilgarriff, Adam and Hus{\'a}k, Milos and McAdam, Katy and Rundell, Michael and Rychl{\`y}, Pavel},
+  booktitle={Proceedings of the XIII EURALEX international congress},
+  volume={1},
+  pages={425--432},
+  year={2008},
+  organization={Universitat Pompeu Fabra Barcelona}
+}
 ```
 
 ## License
