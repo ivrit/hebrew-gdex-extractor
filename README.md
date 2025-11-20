@@ -246,7 +246,7 @@ If you use this library in academic work, please cite:
 ```bibtex
 @software{hebrew_gdex_2025,
   title={Hebrew GDEX Extractor: Unsupervised Example Extraction},
-  author={Ivrit Organization},
+  author={Noam Ordan},
   year={2025},
   url={https://github.com/ivrit/hebrew-gdex-extractor}
 }
@@ -268,4 +268,17 @@ Contributions welcome! Please:
 - [Stanza NLP](https://stanfordnlp.github.io/stanza/) for Hebrew lemmatization
 - [Universal Dependencies](https://universaldependencies.org/) for Hebrew treebanks
 - [Wortschatz Leipzig](https://wortschatz.uni-leipzig.de/) for the Hebrew news corpus
-- GDEX methodology by Kilgarriff et al. (2008)
+- GDEX methodology by [Kilgarriff et al. (2008)]([https://euralex.org/publications/gdex-automatically-finding-good-dictionary-examples-in-a-corpus](https://www.sketchengine.eu/wp-content/uploads/2015/05/GDEX_Automatically_finding_2008.pdf)/)
+
+## References
+
+```bibtex
+@inproceedings{kilgarriff2008gdex,
+  title={GDEX: Automatically finding good dictionary examples in a corpus},
+  author={Kilgarriff, Adam and Hus{\'a}k, Milos and McAdam, Katy and Rundell, Michael and Rychl{\`y}, Pavel},
+  booktitle={Proceedings of the XIII EURALEX international congress},
+  volume={1},
+  pages={425--432},
+  year={2008},
+  organization={Universitat Pompeu Fabra Barcelona}
+}
