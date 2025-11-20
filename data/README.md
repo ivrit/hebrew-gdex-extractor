@@ -5,7 +5,7 @@ This directory is for corpus files used by the Hebrew GDEX extractor.
 ## Required Corpus
 
 Download the Hebrew News 2020 corpus (1M sentences):
-- Source: [Provide source link]
+- Source: [Wortschatz Leipzig Corpora](https://downloads.wortschatz-leipzig.de/corpora/heb_news_2020_1M.tar.gz)
 - Extract to: `data/heb_news_2020_1M/`
 - Required file: `heb_news_2020_1M-sentences.txt`
 
