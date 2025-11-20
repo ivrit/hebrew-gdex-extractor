@@ -1,0 +1,1 @@
+../heb_news_2020_1M/heb_news_2020_1M-sentences.txt
