@@ -211,14 +211,14 @@ from src.collocations.cooccurrence_extractor import CooccurrenceExtractor
 from src.sense_disambiguation.wsd_handler import WsdHandler
 from src.example_generator.gdex_scorer import GdexScorer
 
-# Load corpus
+# Load corpus into memory
 with open('data/heb_news_2020_1M/heb_news_2020_1M-sentences.txt') as f:
     corpus = [line.strip().split('\t')[1].strip('"') for line in f if line.strip()]
 
-# Initialize pipeline
+# Initialize components (no file paths needed)
 lemmatizer = HebrewLemmatizer()
-extractor = CooccurrenceExtractor('data/heb_news_2020_1M/heb_news_2020_1M-sentences.txt')
-wsd = WsdHandler('data/heb_news_2020_1M/heb_news_2020_1M-sentences.txt')
+extractor = CooccurrenceExtractor()
+wsd = WsdHandler()
 scorer = GdexScorer(extractor, wsd)
 
 # Extract examples for a lemma
@@ -229,7 +229,7 @@ examples = scorer.generate_examples(target, sentences, top_n=10, diversity=True)
 
 print(f"Found {len(sentences)} examples for '{target}'")
 for i, ex in enumerate(examples, 1):
-    print(f"{i}. [{ex['score']:.2f}] {ex['sentence']}")
+    print(f"{i}. [{ex['score']:.2f}] (Cluster: {ex['sense_cluster']}) {ex['sentence']}")
 ```
 
 ## Performance
