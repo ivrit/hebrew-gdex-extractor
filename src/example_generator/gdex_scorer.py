@@ -53,7 +53,7 @@ class GdexScorer:
             scores['complexity'] = 0.5
         
         # 3. Completeness score (has proper punctuation)
-        if sentence.strip().endswith(('.', '!', '?', ':', '؟')):
+        if sentence.strip().endswith(('.', '!', '?', ':', ';')):
             scores['completeness'] = 1.0
         else:
             scores['completeness'] = 0.3
