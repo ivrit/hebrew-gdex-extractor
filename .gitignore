@@ -1,0 +1,71 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data files - Exclude large corpus files
+data/heb_news_2020_1M/
+data/*.tar.gz
+data/*:Zone.Identifier
+data/models/
+*.csv
+*.tsv
+
+# Output - Generated results
+output/
+output/*.json
+output/*.txt
+
+# Research papers - Personal academic work
+paper.tex
+*.pdf
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

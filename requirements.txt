@@ -1,0 +1,24 @@
+# Tokenization
+rftokenizer
+
+# NLP Tools
+nltk
+spacy
+stanza
+
+# Hebrew NLP
+hebrew-tokenizer
+
+# Utilities
+python-dotenv
+pyyaml
+
+# Data Processing
+pandas
+numpy
+
+# Machine Learning (for WSD)
+scikit-learn
+
+# Optional: for advanced WSD
+sentence-transformers

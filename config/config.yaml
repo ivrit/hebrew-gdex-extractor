@@ -1,0 +1,20 @@
+paths:
+  corpus_path: "data/corpus"
+  models_path: "data/models"
+  output_path: "output"
+  
+lemmatizer:
+  model: "path/to/lemmatizer/model"
+
+tokenizer:
+  type: "rf_tokenizer"
+
+sense_disambiguation:
+  method: "lightweight"
+
+collocations:
+  window_size: 5
+
+example_generator:
+  num_examples: 10
+  scoring_method: "cooccurrence"
