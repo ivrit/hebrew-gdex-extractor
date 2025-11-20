@@ -24,17 +24,13 @@ def main():
     print("=" * 60)
     
     # Step 1: Initialize components
-    print("\n[1] Initializing components...")
     lemmatizer = HebrewLemmatizer(download_model=False)
     cooccurrence_extractor = CooccurrenceExtractor(corpus_path)
     wsd_handler = WsdHandler(corpus_path)
     gdex_scorer = GdexScorer(cooccurrence_extractor, wsd_handler)
-    print("✓ Components initialized")
     
     # Step 2: Load and prepare corpus
-    print(f"\n[2] Loading corpus (max {max_corpus_lines:,} sentences)...")
     print(f"   Using {n_jobs} parallel jobs")
-    # For demo purposes, use sample sentences if corpus file doesn't exist
     if os.path.exists(corpus_path):
         sentences = cooccurrence_extractor.load_corpus(max_lines=max_corpus_lines)
     else:
@@ -59,13 +55,13 @@ def main():
     print(f"✓ Found {len(matching_sentences)} sentences")
     
     if not matching_sentences:
-        print(f"\n⚠ No sentences found for lemma '{target_lemma}'")
+        print(f"\nNo sentences found for lemma '{target_lemma}'")
         return
     
     # Step 4: Perform sense disambiguation (clustering)
-    print(f"\n[4] Performing sense disambiguation...")
+    print(f"\nPerforming sense disambiguation...")
     sense_clusters = wsd_handler.disambiguate(target_lemma, matching_sentences, n_clusters=2)
-    print(f"✓ Identified {len(sense_clusters)} sense clusters:")
+    print(f"Identified {len(sense_clusters)} sense clusters:")
     for cluster_id, cluster_sents in sense_clusters.items():
         print(f"   Cluster {cluster_id}: {len(cluster_sents)} sentences")
         # Show sample collocations
@@ -74,15 +70,15 @@ def main():
         print(f"   Top collocations: {top_patterns}")
     
     # Step 5: Extract co-occurrences
-    print(f"\n[5] Extracting co-occurrences...")
+    print(f"\nExtracting co-occurrences...")
     cooccurrences = cooccurrence_extractor.extract_cooccurrences(target_lemma, matching_sentences)
     top_cooccurrences = cooccurrence_extractor.get_top_cooccurrences(target_lemma, n=10)
-    print(f"✓ Top 10 co-occurring words:")
+    print(f"Top 10 co-occurring words:")
     for word, count in top_cooccurrences:
         print(f"   {word}: {count}")
     
     # Step 6: Generate and score examples
-    print(f"\n[6] Generating GDEX examples...")
+    print(f"\nGenerating GDEX examples...")
     num_examples = 20  # Increased from 5 to 20
     examples = gdex_scorer.generate_examples(
         target_lemma, 
@@ -91,8 +87,8 @@ def main():
         diversity=True
     )
     
-    print(f"✓ Top {len(examples)} examples:")
-    print("\n" + "=" * 60)
+    print(f"Top {len(examples)} examples:")
+    print("\n" + "=" * 59)
     for i, example in enumerate(examples, 1):
         print(f"\n[Example {i}] (Score: {example['score']:.2f}, Cluster: {example['sense_cluster']})")
         print(f"  {example['sentence']}")
@@ -140,7 +136,7 @@ def main():
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     
-    print(f"✓ Results saved to: {output_file}")
+    print(f"Results saved to: {output_file}")
     
     # Also save a readable text version
     text_file = os.path.join(output_dir, f"gdex_results_{target_lemma}_{timestamp}.txt")
@@ -175,7 +171,7 @@ def main():
             f.write(f"[Example {i}] (Score: {example['score']:.2f}, Cluster: {example['sense_cluster']})\n")
             f.write(f"{example['sentence']}\n\n")
     
-    print(f"✓ Text version saved to: {text_file}")
+    print(f"Text version saved to: {text_file}")
     
     print("\n" + "=" * 60)
     print("Pipeline completed successfully!")
