@@ -5,7 +5,7 @@ def load_config(config_file):
     return config
 
 def preprocess_text(text):
-    # Implement any necessary preprocessing steps for Hebrew text
+    # TBD
     return text.strip()
 
 def extract_lemma_from_word(word, lemmatizer):
