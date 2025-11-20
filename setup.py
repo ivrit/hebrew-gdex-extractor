@@ -6,12 +6,12 @@ with open('README.md', 'r', encoding='utf-8') as f:
 setup(
     name='hebrew-gdex',
     version='0.1.0',
-    author='Your Name',
-    author_email='your.email@example.com',
+    author='Noam Ordan',
+    author_email='noam.ordan@gmail.com',
     description='Automated extraction of Good Dictionary Examples (GDEX) for Hebrew using unsupervised clustering',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/yourusername/hebrew-gdex',
+    url='https://github.com/ivrit/hebrew-gdex-extractor',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     install_requires=[
