@@ -1,34 +1,39 @@
 import unittest
 from src.lemmatizer.hebrew_lemmatizer import HebrewLemmatizer
 
+
 class TestHebrewLemmatizer(unittest.TestCase):
 
     def setUp(self):
         self.lemmatizer = HebrewLemmatizer()
 
-    def test_lemmatize_single_word(self):
-        word = "נקודה"
-        expected_lemma = "נקודה"  # Adjust based on the actual lemmatization logic
-        result = self.lemmatizer.lemmatize(word)
-        self.assertEqual(result, expected_lemma)
+    def test_lemmatize_plural_to_singular(self):
+        result = self.lemmatizer.lemmatize("ספרים")
+        self.assertEqual(result, "ספר")
 
-    def test_lemmatize_word_with_suffix(self):
-        word = "נקודות"
-        expected_lemma = "נקודה"  # Adjust based on the actual lemmatization logic
-        result = self.lemmatizer.lemmatize(word)
-        self.assertEqual(result, expected_lemma)
+    def test_lemmatize_verb_conjugation(self):
+        result = self.lemmatizer.lemmatize("הלכתי")
+        self.assertEqual(result, "הלך")
 
-    def test_lemmatize_different_forms(self):
-        words = ["נקודה", "נקודות", "נקודתי"]
-        expected_lemmas = ["נקודה", "נקודה", "נקודה"]  # Adjust based on the actual lemmatization logic
-        results = [self.lemmatizer.lemmatize(word) for word in words]
-        self.assertEqual(results, expected_lemmas)
+    def test_lemmatize_with_definite_article(self):
+        result = self.lemmatizer.lemmatize("הספר")
+        self.assertEqual(result, "ספר")
 
-    def test_lemmatize_non_hebrew_word(self):
-        word = "point"
-        expected_lemma = None  # Assuming the lemmatizer returns None for non-Hebrew words
-        result = self.lemmatizer.lemmatize(word)
-        self.assertEqual(result, expected_lemma)
+    def test_lemmatize_sentence(self):
+        sentence = "הילדים הלכו לבית הספר"
+        results = self.lemmatizer.lemmatize_sentence(sentence)
+        
+        self.assertIsInstance(results, list)
+        self.assertGreater(len(results), 0)
+        self.assertIsInstance(results[0], tuple)
+
+    def test_get_lemmas_only(self):
+        sentence = "הילדים הלכו"
+        lemmas = self.lemmatizer.get_lemmas_only(sentence)
+        
+        self.assertIsInstance(lemmas, list)
+        self.assertIn("ילד", lemmas)
+
 
 if __name__ == '__main__':
     unittest.main()

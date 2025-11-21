@@ -59,6 +59,9 @@ paper.tex
 *.bbl
 *.blg
 
+# Cleanup documentation
+CLEANUP_SUMMARY.md
+
 # Jupyter Notebook
 .ipynb_checkpoints
 

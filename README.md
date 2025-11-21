@@ -10,11 +10,12 @@ This library uses **unsupervised clustering** to distinguish word senses and **m
 ## Features
 
 - ✅ **Neural lemmatization** using Stanza (handles Hebrew morphology)
-- ✅ **Unsupervised word sense disambiguation** via TF-IDF + K-means clustering
+- ✅ **Automatic cluster detection** via silhouette score (no manual k selection)
+- ✅ **POS-filtered collocations** (content words only: nouns, verbs, adjectives, adverbs)
+- ✅ **TF-IDF cluster-specific collocation extraction** (filters out cross-cluster noise)
 - ✅ **Multi-criteria GDEX scoring** (length, completeness, typicality, informativeness)
-- ✅ **Parallel processing** for efficient corpus analysis
-- ✅ **Collocation analysis** to validate sense clusters
-- ✅ **JSON + TXT output** for both machine and human use
+- ✅ **Parallel processing** with dynamic CPU allocation
+- ✅ **JSON + TXT output** with Hebrew-formatted results
 
 ## Installation
 
@@ -81,14 +82,16 @@ Edit `src/main.py` to customize:
 target_lemma = 'נקודה'  # Change to any Hebrew lemma
 
 # Corpus settings
-max_corpus_lines = 10000  # Use 10k for testing, 1M for production
+max_corpus_lines = 50000  # Adjust based on needs
 
-# Clustering
-n_clusters = 2  # Number of sense clusters
+# Window size for collocations
+window = 4  # Words before/after target (in WsdHandler)
 
 # Output
 num_examples = 20  # Number of examples to generate
 ```
+
+Note: Cluster number (k) is automatically determined using silhouette score.
 
 ### Example Output
 
@@ -100,21 +103,22 @@ The pipeline generates two output files:
 
 #### Real Example: נקודה (point/dot)
 
-When running on 10,000 sentences from Hebrew news corpus, the system found **25 sentences** containing the lemma `נקודה` and identified **2 distinct sense clusters**:
+When running on 50,000 sentences from Hebrew news corpus, the system found **102 sentences** containing the lemma `נקודה` and **automatically detected 8 distinct sense clusters** using silhouette score:
 
-**Cluster 0 (Temporal/Metaphorical):** "point in time", "turning point"
-- Top collocations: `בלבד` (only), `אנחנו` (we), `כדי` (in order to), `לסמן` (to mark), `בזמן` (in time)
-- Example (Score: 0.92):
+**Cluster 0 (Geographic/Strategic):** "strategic point", locations
+- Cluster-specific collocations: `כנראה`, `אסטרטגי`, `ישראל`, `תל`, `אביב`
+- Example:
+  > אז נכון שאת האפקט הנורא של הקרינה אין שם, אבל זה מפוזר על ראשי נפץ מדויקים של כ-200 אלף טילים שיודעים להגיע לכל נקודה אסטרטגית בישראל.
+
+**Cluster 1 (Sports/Competition):** "point" in games/scores
+- Cluster-specific collocations: `ויתר`, `יובנטוס`, `יתרון`, `לאציו`
+- Example:
+  > אבל העונה הופסקה הליגה אחרי 26 מחזורים כשליובנטוס יתרון של נקודה בלבד על לאציו.
+
+**Cluster 2 (Time/Decision):** "point in time", critical moments
+- Cluster-specific collocations: `untitled`, `סימן`, `זמן`, `אלבום`, `החלטה`
+- Example:
   > אבל בנקודה הזאת האלבום משתנה ומגלה את הפנים האמיתיות שלו.
-  > 
-  > *"But at this point the album changes and reveals its true face."*
-
-**Cluster 1 (Argumentative/Abstract):** "the point is", "main point", abstract argument
-- Top collocations: `אבל` (but), `עלייה` (rise), `הנמוכה` (lowest), `נאום` (speech)
-- Example (Score: 0.86):
-  > אבל האקלים הפוליטי בסין, והידרדרות היחסים עם ארה״ב, כנראה הגיעו לנקודה שבה כבר אין צורך במדיניות רשמית בנושא.
-  > 
-  > *"But the political climate in China, and deteriorating relations with the US, have apparently reached a point where there is no longer a need for official policy on the matter."*
 
 #### How to Read the Output
 
@@ -128,47 +132,30 @@ When running on 10,000 sentences from Hebrew news corpus, the system found **25 
 - **-1**: Overflow cluster (examples that don't fit main clusters clearly)
 
 **Collocation Patterns** help validate sense distinction:
-- **Cluster 0**: `בזמן` (in time), `לסמן` (to mark) → temporal usage
-- **Cluster 1**: `עלייה` (rise), `הנמוכה` (lowest) → statistical/political discourse
+- Uses **POS filtering** to show only content words (NOUN, PROPN, VERB, ADJ, ADV)
+- **TF-IDF filtering** removes words common across all clusters
+- Shows cluster-specific collocations (>50% of occurrences in that cluster)
 
 **Full TXT Output Structure:**
 ```
-============================================================
-GDEX Results for: נקודה
-============================================================
+תוצאות GDEX עבור: נקודה
+נוצר ב: 21/11/2025 11:15
+================================================================================
 
-Corpus size: 10,000 sentences
-Matching sentences: 25
-Sense clusters: 2
+גודל קורפוס: 50,000 משפטים
+משפטים עם 'נקודה': 102
+מספר אשכולות משמעות: 8
 
-============================================================
-SENSE CLUSTERS
-============================================================
+================================================================================
 
-Cluster 0: 5 sentences
-Top collocations: [('בלבד', 2), ('אנחנו', 2), ('כדי', 1), ...]
+אשכול 0
+גודל: 5 משפטים
+קולוקציות: כנראה (1), עבד (1), אין (1), כסף (1), אסטרטגי (1)
 
-Cluster 1: 5 sentences  
-Top collocations: [('אבל', 2), ('עלייה', 1), ('הנמוכה', 1), ...]
-
-============================================================
-TOP CO-OCCURRING WORDS (across all clusters)
-============================================================
-
-  אבל: 13
-  שבה: 4
-  היא: 4
-  ...
-
-============================================================
-TOP EXAMPLES (GDEX) - Ranked by quality score
-============================================================
-
-[Example 1] (Score: 0.92, Cluster: 0)
-אבל בנקודה הזאת האלבום משתנה ומגלה את הפנים האמיתיות שלו.
-
-[Example 2] (Score: 0.90, Cluster: 2)
-אבל הנקודה היא שאנחנו לא צריכים לבנות עליו להיות אמבאפה...
+דוגמאות:
+1. אז נכון שאת האפקט הנורא של הקרינה אין שם, אבל זה מפוזר על ראשי נפץ מדויקים של כ-200 אלף טילים שיודעים להגיע לכל **נקודה** אסטרטגית בישראל.
+2. אז הגענו ל**נקודה** שבה אנחנו מתמקחים על היקף החלת הריבונות.
+...
 ```
 
 **JSON format** includes the same data in structured form for programmatic processing.
@@ -196,10 +183,11 @@ hebrew-gdex-extractor/
 1. **Corpus Loading**: Load Hebrew sentences from corpus
 2. **Lemmatization**: Use Stanza to find all forms of target lemma
 3. **Sentence Extraction**: Filter sentences containing the lemma
-4. **Sense Clustering**: Group sentences by usage context (TF-IDF + K-means)
-5. **Collocation Analysis**: Extract typical context words for each sense
-6. **GDEX Scoring**: Rank sentences by quality criteria
-7. **Output**: Save top-scored examples with metadata
+4. **Automatic Clustering**: Determine optimal k using silhouette score, then apply K-means
+5. **POS-filtered Collocations**: Extract content words (4-word window) for each cluster
+6. **TF-IDF Cluster Filtering**: Keep only cluster-specific collocations
+7. **GDEX Scoring**: Rank sentences by quality criteria
+8. **Output**: Save top-scored examples with Hebrew formatting
 
 ## Advanced Usage
 
@@ -224,10 +212,11 @@ scorer = GdexScorer(extractor, wsd)
 # Extract examples for a lemma
 target = 'שלום'
 sentences = extractor.extract_sentences_with_lemma(target, corpus, lemmatizer, n_jobs=4)
-clusters = wsd.disambiguate(target, sentences, n_clusters=2)
+clusters = wsd.disambiguate(target, sentences)  # Auto-detects k
+cluster_collocations = wsd.extract_cluster_specific_collocations(target, clusters, window=4)
 examples = scorer.generate_examples(target, sentences, top_n=10, diversity=True)
 
-print(f"Found {len(sentences)} examples for '{target}'")
+print(f"Found {len(sentences)} examples for '{target}' in {len(clusters)} clusters")
 for i, ex in enumerate(examples, 1):
     print(f"{i}. [{ex['score']:.2f}] (Cluster: {ex['sense_cluster']}) {ex['sentence']}")
 ```
@@ -268,7 +257,7 @@ Contributions welcome! Please:
 - [Stanza NLP](https://stanfordnlp.github.io/stanza/) for Hebrew lemmatization
 - [Universal Dependencies](https://universaldependencies.org/) for Hebrew treebanks
 - [Wortschatz Leipzig](https://wortschatz.uni-leipzig.de/) for the Hebrew news corpus
-- GDEX methodology by [Kilgarriff et al. (2008)]([https://euralex.org/publications/gdex-automatically-finding-good-dictionary-examples-in-a-corpus](https://www.sketchengine.eu/wp-content/uploads/2015/05/GDEX_Automatically_finding_2008.pdf)/)
+- GDEX methodology by Kilgarriff et al. (2008)
 
 ## References
 
