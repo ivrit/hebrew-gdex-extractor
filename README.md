@@ -108,17 +108,17 @@ When running on 50,000 sentences from Hebrew news corpus, the system found **102
 **Cluster 0 (Geographic/Strategic):** "strategic point", locations
 - Cluster-specific collocations: `כנראה`, `אסטרטגי`, `ישראל`, `תל`, `אביב`
 - Example:
-  > אז נכון שאת האפקט הנורא של הקרינה אין שם, אבל זה מפוזר על ראשי נפץ מדויקים של כ-200 אלף טילים שיודעים להגיע לכל נקודה אסטרטגית בישראל.
+  > אז נכון שאת האפקט הנורא של הקרינה אין שם, אבל זה מפוזר על ראשי נפץ מדויקים של כ-200 אלף טילים שיודעים להגיע לכל **נקודה** אסטרטגית בישראל.
 
 **Cluster 1 (Sports/Competition):** "point" in games/scores
 - Cluster-specific collocations: `ויתר`, `יובנטוס`, `יתרון`, `לאציו`
 - Example:
-  > אבל העונה הופסקה הליגה אחרי 26 מחזורים כשליובנטוס יתרון של נקודה בלבד על לאציו.
+  > אבל העונה הופסקה הליגה אחרי 26 מחזורים כשליובנטוס יתרון של **נקודה** בלבד על לאציו.
 
 **Cluster 2 (Time/Decision):** "point in time", critical moments
 - Cluster-specific collocations: `untitled`, `סימן`, `זמן`, `אלבום`, `החלטה`
 - Example:
-  > אבל בנקודה הזאת האלבום משתנה ומגלה את הפנים האמיתיות שלו.
+  > אבל **בנקודה** הזאת האלבום משתנה ומגלה את הפנים האמיתיות שלו.
 
 #### How to Read the Output
 
